@@ -2,7 +2,8 @@ require 'socket'
 
 server = TCPServer.new 2000
 loop do
-  socket = server.accept
-  socket.puts "Hi"
-  socket.close
+  Thread.start(server.accept) do |socket|
+    socket.puts "Hi"
+    socket.close
+  end
 end
