@@ -1,3 +1,5 @@
+require_relative 'subscriber'
+
 class User
   attr_accessor :followers
   attr_accessor :subscribers
