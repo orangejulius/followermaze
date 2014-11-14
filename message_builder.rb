@@ -34,7 +34,7 @@ class MessageBuilder
   end
 
   def send(event)
-    if event.type == :message
+    if [:message, :follow].include? event.type
       message = Message.new(event: event, recipient: event.to)
       @destination.send message
     end

@@ -29,4 +29,14 @@ describe MessageBuilder do
 
     assert_equal 0, @destination.items.size
   end
+
+  it 'creates one message addressed to :to for follow event' do
+    event = Event.new(type: :follow, from: @user1, to: @user2)
+
+    @message_builder.send(event)
+
+    assert_equal 1, @destination.items.size
+    assert_equal event, @destination.items.first.event
+    assert_equal @user2, @destination.items.first.recipient
+  end
 end
