@@ -1,5 +1,9 @@
 require_relative 'event'
-require_relative 'subscriber'
+require_relative 'event_accumulator'
+
+class Subscriber
+  include EventAccumulator
+end
 
 class User
   attr_accessor :followers
