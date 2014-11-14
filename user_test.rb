@@ -39,6 +39,19 @@ describe User do
     assert_equal [], user1.followers
   end
 
+  it 'does NOT notify subscribers when sent unfollow event' do
+    user1 = User.new(1)
+    user2 = User.new(2)
+    event = Event.new(type: :unfollow, from: user2, to: user1)
+    user1.followers = [user2]
+    subscriber = Subscriber.new
+    user1.subscribers.push subscriber
+
+    user1.send(event)
+
+    assert_equal [], subscriber.events
+  end
+
   it 'notifies subscribers when sent private message' do
       subscriber = Subscriber.new
       user1 = User.new(1)

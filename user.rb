@@ -15,11 +15,16 @@ class User
   end
 
   def send(event)
-    @subscribers.each {|s| s.send(event)}
-    if event.type == :follow
+    case event.type
+    when :follow
+      @subscribers.each {|s| s.send(event)}
       followers.push(event.from)
-    else
+    when :unfollow
       followers.delete(event.from)
+    when :broadcast
+      @subscribers.each {|s| s.send(event)}
+    when :message
+      @subscribers.each {|s| s.send(event)}
     end
   end
 end
