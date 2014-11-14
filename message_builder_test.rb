@@ -7,9 +7,12 @@ describe MessageBuilder do
   def setup
     @user1 = User.new(1)
     @user2 = User.new(2)
+    @user3 = User.new(3)
+    @user4 = User.new(4)
+    user_list = [@user1, @user2, @user3, @user4]
 
     @destination = MessageAccumulator.new
-    @message_builder = MessageBuilder.new(@destination)
+    @message_builder = MessageBuilder.new(@destination, user_list)
   end
 
   it 'creates one message addressed to :to for private messages' do
@@ -41,8 +44,6 @@ describe MessageBuilder do
   end
 
   it 'creates one message addressed to each follower for status updates' do
-    @user3 = User.new(3)
-
     followers = [@user2, @user3]
     @user1.followers = followers
 
@@ -53,5 +54,14 @@ describe MessageBuilder do
     assert_equal 2, @destination.items.size
     assert_equal [event, event], @destination.items.map(&:event)
     assert_equal followers, @destination.items.map(&:recipient)
+  end
+
+  it 'creates a message for every user from brodcast events' do
+
+    event = Event.new(type: :broadcast)
+
+    @message_builder.send(event)
+
+    assert_equal 4, @destination.items.size
   end
 end

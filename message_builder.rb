@@ -30,8 +30,9 @@ class Message
 end
 
 class MessageBuilder
-  def initialize(destination)
+  def initialize(destination, user_list)
     @destination = destination
+    @user_list = user_list
   end
 
   def send(event)
@@ -40,6 +41,8 @@ class MessageBuilder
       unicast(event, event.to)
     when :update
       multicast(event, event.from.followers)
+    when :broadcast
+      multicast(event, @user_list)
     end
   end
 
@@ -51,6 +54,6 @@ class MessageBuilder
   end
 
   def multicast(event, recipients)
-    recipients.each { |r| unicast(event, r) }
+    recipients.each {|r| unicast(event, r) }
   end
 end
