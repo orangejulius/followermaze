@@ -35,9 +35,10 @@ class MessageBuilder
   end
 
   def send(event)
-    if [:message, :follow].include? event.type
+    case event.type
+    when :message, :follow
       unicast(event, event.to)
-    elsif event.type == :update
+    when :update
       multicast(event, event.from.followers)
     end
   end
