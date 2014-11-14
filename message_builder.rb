@@ -6,12 +6,13 @@ class MessageAccumulator
   include Accumulator
 end
 
-# a user just needs an id
 class User
   attr_reader :id
+  attr_accessor :followers
 
   def initialize(id)
     @id = id
+    @followers = []
   end
 end
 
@@ -37,6 +38,11 @@ class MessageBuilder
     if [:message, :follow].include? event.type
       message = Message.new(event: event, recipient: event.to)
       @destination.send message
+    elsif event.type == :update
+      event.from.followers.each do |follower|
+        message = Message.new(event: event, recipient: follower)
+        @destination.send message
+      end
     end
   end
 end

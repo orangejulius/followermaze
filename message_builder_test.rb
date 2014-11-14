@@ -39,4 +39,19 @@ describe MessageBuilder do
     assert_equal event, @destination.items.first.event
     assert_equal @user2, @destination.items.first.recipient
   end
+
+  it 'creates one message addressed to each follower for status updates' do
+    @user3 = User.new(3)
+
+    followers = [@user2, @user3]
+    @user1.followers = followers
+
+    event = Event.new(type: :update, from: @user1)
+
+    @message_builder.send(event)
+
+    assert_equal 2, @destination.items.size
+    assert_equal [event, event], @destination.items.map(&:event)
+    assert_equal followers, @destination.items.map(&:recipient)
+  end
 end
