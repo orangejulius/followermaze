@@ -1,3 +1,4 @@
+require_relative 'event'
 require_relative 'subscriber'
 
 class User
