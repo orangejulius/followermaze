@@ -19,16 +19,28 @@ class User
   end
 
   def send(event)
+    update_followers(event)
+    notify_subscribers(event)
+  end
+
+  private
+
+  def update_followers(event)
     case event.type
     when :follow
-      @subscribers.each {|s| s.send(event)}
       followers.push(event.from)
     when :unfollow
       followers.delete(event.from)
-    when :broadcast
-      @subscribers.each {|s| s.send(event)}
-    when :message
-      @subscribers.each {|s| s.send(event)}
     end
+  end
+
+  def notify_subscribers(event)
+    if [:message, :broadcast, :follow].include? event.type
+      send_to_subscribers(event)
+    end
+  end
+
+  def send_to_subscribers(event)
+      @subscribers.each {|s| s.send(event)}
   end
 end
