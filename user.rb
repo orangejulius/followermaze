@@ -13,4 +13,13 @@ class User
     @followers = []
     @subscribers = []
   end
+
+  def send(event)
+    @subscribers.each {|s| s.send(event)}
+    if event.type == :follow
+      followers.push(event.from)
+    else
+      followers.delete(event.from)
+    end
+  end
 end
