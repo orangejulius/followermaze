@@ -36,13 +36,18 @@ class MessageBuilder
 
   def send(event)
     if [:message, :follow].include? event.type
-      message = Message.new(event: event, recipient: event.to)
-      @destination.send message
+      unicast(event, event.to)
     elsif event.type == :update
       event.from.followers.each do |follower|
-        message = Message.new(event: event, recipient: follower)
-        @destination.send message
+        unicast(event, follower)
       end
     end
+  end
+
+  private
+
+  def unicast(event, recipient)
+    message = Message.new(event: event, recipient: recipient)
+    @destination.send message
   end
 end
