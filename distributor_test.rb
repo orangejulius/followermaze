@@ -38,4 +38,15 @@ describe Distributor do
 
     assert_equal [event], user2.events
   end
+
+  it 'sends status update events to _from_ user' do
+    user1 = User.new
+    user2 = User.new
+    event = Event.new(type: :update, from: user1, to: user2)
+    distributor = Distributor.new
+
+    distributor.send(event)
+
+    assert_equal [event], user1.events
+  end
 end

@@ -64,4 +64,29 @@ describe User do
 
       assert_equal [event], subscriber.events
   end
+
+  it 'forwards its own status update events to followers' do
+    follower = FakeUser.new
+    user = User.new(1)
+    user.followers.push(follower)
+
+    event = Event.new(type: :update, from: user)
+
+    user.send(event)
+
+    assert_equal [event], follower.events
+  end
+
+  it 'sends status updates from other users to subscribers' do
+    subscriber = Subscriber.new
+    user = User.new(1)
+    follower = User.new(2)
+    follower.subscribers.push(subscriber)
+
+    event = Event.new(type: :update, from: user)
+
+    follower.send(event)
+
+    assert_equal [event], subscriber.events
+  end
 end

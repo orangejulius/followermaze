@@ -7,6 +7,10 @@ end
 
 class Distributor
   def send(event)
-    event.to.send(event)
+    if event.type == :update
+      event.from.send(event)
+    else
+      event.to.send(event)
+    end
   end
 end

@@ -5,6 +5,10 @@ class Subscriber
   include EventAccumulator
 end
 
+class FakeUser
+  include EventAccumulator
+end
+
 class User
   attr_accessor :followers
   attr_accessor :subscribers
@@ -37,6 +41,12 @@ class User
   def notify_subscribers(event)
     if [:message, :broadcast, :follow].include? event.type
       send_to_subscribers(event)
+    elsif event.type == :update
+      if event.from == self
+        @followers.each {|f| f.send(event)}
+      else
+        send_to_subscribers(event)
+      end
     end
   end
 
