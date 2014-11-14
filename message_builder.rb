@@ -34,7 +34,9 @@ class MessageBuilder
   end
 
   def send(event)
-    message = Message.new(event: event, recipient: event.to)
-    @destination.send message
+    if event.type == :message
+      message = Message.new(event: event, recipient: event.to)
+      @destination.send message
+    end
   end
 end
