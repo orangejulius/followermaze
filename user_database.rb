@@ -11,8 +11,12 @@ class UserDatabase
     @database = {}
   end
 
-  def get(id)
+  def add(id)
     @database[id] = User.new(id) unless @database[id]
+    return @database[id]
+  end
+
+  def get(id)
     return @database[id]
   end
 
