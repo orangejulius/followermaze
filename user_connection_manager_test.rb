@@ -83,6 +83,7 @@ describe UserConnectionManager do
     manager = UserConnectionManager.new(fake_socket, 1, SocketCheckingUserConnection)
     manager.run
 
+    sleep(0.01) # wait for connection to be established
     fake_socket.verify
     assert_equal 1, SocketCheckingUserConnection.creation_count
   end
@@ -105,6 +106,7 @@ describe UserConnectionManager do
     manager.run
 
     message = Message.new(payload: "expected payload", recipient: 10)
+    sleep(0.01) # wait for connection to be established
     manager.send_message(message)
 
     expected = { 10 => "expected payload" }
