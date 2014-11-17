@@ -36,6 +36,23 @@ class SocketCheckingUserConnection < UserConnection
   end
 end
 
+class PayloadExpectingUserConnection
+  @@send_payload_count = 0
+  include Minitest::Assertions
+
+  def initialize(socket_connection)
+  end
+
+  def send_payload(payload)
+    assert_equal "expected payload", payload
+    @@send_payload_count += 1
+  end
+
+  def self.send_payload_count
+    @@send_payload_count
+  end
+end
+
 describe UserConnectionManager do
   it 'passes socket connection given by accept to UserConnection class' do
     fake_socket = Minitest::Mock.new
@@ -56,5 +73,18 @@ describe UserConnectionManager do
     manager.run
 
     assert_equal connection_limit, ConnectionCountingFakeSocket.accept_calls
+  end
+
+  it 'sends the payload of received messages to the UserConnection' do
+    fake_socket = FakeSocket.new
+
+    connection_limit = 5
+    manager = UserConnectionManager.new(fake_socket, connection_limit, PayloadExpectingUserConnection)
+    manager.run
+
+    message = Message.new(payload: "expected payload", recipient: 10)
+    manager.send_message(message)
+
+    assert_equal 1, PayloadExpectingUserConnection.send_payload_count
   end
 end
