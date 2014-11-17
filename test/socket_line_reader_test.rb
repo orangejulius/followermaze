@@ -2,7 +2,7 @@ require 'minitest/spec'
 require 'minitest/autorun'
 require 'stringio'
 
-require_relative 'socket_line_reader'
+require_relative '../src/socket_line_reader'
 
 class LineAccumulator
   attr_reader :lines
