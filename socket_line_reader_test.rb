@@ -26,4 +26,14 @@ describe SocketLineReader do
 
     assert_equal ["a\n", "b\n"], destination.lines
   end
+
+  it 'handles CRLF line endings' do
+    fake_socket = StringIO.new("a\r\nb\r\n")
+    destination = LineAccumulator.new
+    reader = SocketLineReader.new(fake_socket, destination)
+
+    reader.run
+
+    assert_equal ["a\r\n", "b\r\n"], destination.lines
+  end
 end
