@@ -36,6 +36,28 @@ class SocketCheckingUserConnection < UserConnection
   end
 end
 
+class PayloadTrackingUserConnection < UserConnection
+  @@next_id = 1
+  @@payloads = {}
+
+  def initialize(socket_connection)
+    @id = @@next_id
+    @@next_id += 1
+  end
+
+  def get_id
+    @id
+  end
+
+  def send_payload(payload)
+    @@payloads[@id] = payload
+  end
+
+  def self.get_payloads
+    @@payloads
+  end
+end
+
 class PayloadExpectingUserConnection
   @@send_payload_count = 0
   include Minitest::Assertions
@@ -75,16 +97,17 @@ describe UserConnectionManager do
     assert_equal connection_limit, ConnectionCountingFakeSocket.accept_calls
   end
 
-  it 'sends the payload of received messages to the UserConnection' do
+  it 'sends the payload of received messages to the correct UserConnection' do
     fake_socket = FakeSocket.new
 
-    connection_limit = 5
-    manager = UserConnectionManager.new(fake_socket, connection_limit, PayloadExpectingUserConnection)
+    connection_limit = 15
+    manager = UserConnectionManager.new(fake_socket, connection_limit, PayloadTrackingUserConnection)
     manager.run
 
     message = Message.new(payload: "expected payload", recipient: 10)
     manager.send_message(message)
 
-    assert_equal 1, PayloadExpectingUserConnection.send_payload_count
+    expected = { 10 => "expected payload" }
+    assert_equal expected, PayloadTrackingUserConnection.get_payloads
   end
 end
