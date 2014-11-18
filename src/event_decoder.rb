@@ -23,6 +23,8 @@ class EventDecoder
       :broadcast
     when 'F'
       :follow
+    when 'U'
+      :unfollow
     end
   end
 

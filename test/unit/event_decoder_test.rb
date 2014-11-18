@@ -50,4 +50,16 @@ describe EventDecoder do
       assert_equal 9, @destination.events.first.to
     end
   end
+
+  describe 'parsing unfollow event' do
+    it 'sets type to unfollow' do
+      input = '562|U|2|3'
+      @destination = EventAccumulator.new
+      @decoder = EventDecoder.new(@destination)
+
+      @decoder.send_line(input)
+
+      assert_equal :unfollow, @destination.events.first.type
+    end
+  end
 end
