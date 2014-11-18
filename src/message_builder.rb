@@ -13,7 +13,7 @@ class MessageBuilder
     case event.type
     when :message, :follow
       unicast(event, to)
-    when :update
+    when :status
       multicast(event, from.followers)
     when :broadcast
       multicast(event, @user_database.all)
