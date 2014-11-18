@@ -8,7 +8,7 @@ class EventDecoder
   def send_line(input)
     parts = input.split '|'
     sequence = parts[0].to_i
-    type = decode_type(parts[1])
+    type = decode_type(parts[1].chomp)
     from = decode_user(parts[2])
     to = decode_user(parts[3])
 

@@ -29,6 +29,13 @@ describe EventDecoder do
     it 'sets event payload to raw input string' do
       assert_equal @input, @destination.events.first.payload
     end
+
+    it 'handles newline endings' do
+      @decoder.send_line("5|B\n")
+      @decoder.send_line("7|B\r\n")
+
+      assert_equal [:broadcast], @destination.events.map(&:type).uniq
+    end
   end
 
   describe 'parsing follow event' do
