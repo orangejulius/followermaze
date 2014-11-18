@@ -4,7 +4,7 @@ class Event
   attr_reader :from
   attr_reader :to
 
-  def initialize(sequence:, type:, from: nil, to: nil)
+  def initialize(sequence: nil, type: nil, from: nil, to: nil)
     @sequence = sequence
     @type = type
     @from = from
