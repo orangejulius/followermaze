@@ -2,6 +2,12 @@ require 'minitest/spec'
 
 require_relative '../../src/user_connection_manager'
 
+class FakeThread
+  def self.start(arg)
+    yield arg
+  end
+end
+
 class FakeUserConnection
   def initialize(socket_connection)
   end
@@ -87,10 +93,9 @@ describe UserConnectionManager do
     fake_socket = Minitest::Mock.new
     fake_socket.expect(:accept, "this would actually be a socket connection")
 
-    manager = UserConnectionManager.new(fake_socket, 1, SocketCheckingUserConnection)
+    manager = UserConnectionManager.new(fake_socket, 1, SocketCheckingUserConnection, FakeThread)
     manager.run
 
-    sleep(0.01) # wait for connection to be established
     fake_socket.verify
     assert_equal 1, SocketCheckingUserConnection.creation_count
   end
@@ -99,7 +104,7 @@ describe UserConnectionManager do
     fake_socket = ConnectionCountingFakeSocket.new
 
     connection_limit = 5
-    manager = UserConnectionManager.new(fake_socket, connection_limit, FakeUserConnection)
+    manager = UserConnectionManager.new(fake_socket, connection_limit, FakeUserConnection, FakeThread)
     manager.run
 
     assert_equal connection_limit, ConnectionCountingFakeSocket.accept_calls
@@ -109,11 +114,10 @@ describe UserConnectionManager do
     fake_socket = FakeSocket.new
 
     connection_limit = 15
-    manager = UserConnectionManager.new(fake_socket, connection_limit, EventTrackingUserConnection)
+    manager = UserConnectionManager.new(fake_socket, connection_limit, EventTrackingUserConnection, FakeThread)
     manager.run
 
     message = Message.new(event: "fake event", recipient: 10)
-    sleep(0.01) # wait for connection to be established
     manager.send_message(message)
 
     expected = { 10 => "fake event" }
