@@ -3,7 +3,7 @@ require 'minitest/spec'
 require_relative '../../src/user_connection_manager'
 
 class FakeThread
-  def self.start(arg)
+  def self.start(arg = nil)
     yield arg
   end
 end

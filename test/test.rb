@@ -11,5 +11,6 @@ require_relative 'unit/user_connection_manager_test'
 require_relative 'unit/user_connection_test'
 
 require_relative 'integration/socket_line_reader_test'
+require_relative 'integration/user_connection_manager_test'
 
 require 'minitest/autorun'
