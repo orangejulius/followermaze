@@ -15,7 +15,7 @@ describe MessageBuilder do
   end
 
   it 'creates one message addressed to :to for private messages' do
-    event = Event.new(type: :message, from: @user1, to: @user2, sequence: 1)
+    event = Event.new(type: :message, from: @user1.id, to: @user2.id, sequence: 1)
 
     @message_builder.send_event(event)
 
@@ -25,7 +25,7 @@ describe MessageBuilder do
   end
 
   it 'creates no messages for an unfollow event' do
-    event = Event.new(type: :unfollow, from: @user1, to: @user2, sequence: 1)
+    event = Event.new(type: :unfollow, from: @user1.id, to: @user2.id, sequence: 1)
 
     @message_builder.send_event(event)
 
@@ -33,7 +33,7 @@ describe MessageBuilder do
   end
 
   it 'creates one message addressed to :to for follow event' do
-    event = Event.new(type: :follow, from: @user1, to: @user2, sequence: 1)
+    event = Event.new(type: :follow, from: @user1.id, to: @user2.id, sequence: 1)
 
     @message_builder.send_event(event)
 
@@ -46,7 +46,7 @@ describe MessageBuilder do
     @user1.add_follower @user2
     @user1.add_follower @user3
 
-    event = Event.new(type: :update, from: @user1, sequence: 1)
+    event = Event.new(type: :update, from: @user1.id, sequence: 1)
 
     @message_builder.send_event(event)
 

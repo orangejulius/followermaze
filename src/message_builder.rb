@@ -8,11 +8,13 @@ class MessageBuilder
   end
 
   def send_event(event)
+    to = @user_database.get(event.to)
+    from = @user_database.get(event.from)
     case event.type
     when :message, :follow
-      unicast(event, event.to)
+      unicast(event, to)
     when :update
-      multicast(event, event.from.followers)
+      multicast(event, from.followers)
     when :broadcast
       multicast(event, @user_database.all)
     end
