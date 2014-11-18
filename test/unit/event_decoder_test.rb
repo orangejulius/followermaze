@@ -62,4 +62,16 @@ describe EventDecoder do
       assert_equal :unfollow, @destination.events.first.type
     end
   end
+
+  describe 'parsing private message event' do
+    it 'sets type to message' do
+      input = '2|P|4|5'
+      @destination = EventAccumulator.new
+      @decoder = EventDecoder.new(@destination)
+
+      @decoder.send_line(input)
+
+      assert_equal :message, @destination.events.first.type
+    end
+  end
 end

@@ -25,6 +25,8 @@ class EventDecoder
       :follow
     when 'U'
       :unfollow
+    when 'P'
+      :message
     end
   end
 
