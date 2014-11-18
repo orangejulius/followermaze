@@ -7,6 +7,7 @@ require_relative 'unit/user_database_test'
 require_relative 'unit/user_collector_test'
 require_relative 'unit/follower_manager_test'
 require_relative 'unit/message_builder_test'
+require_relative 'unit/user_connection_manager_test'
 
 require_relative 'integration/socket_line_reader_test'
 
