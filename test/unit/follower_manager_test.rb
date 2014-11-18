@@ -10,8 +10,17 @@ describe FollowerManager do
     @follower_manager = FollowerManager.new(@destination, @user_database)
 
   end
-  it 'forwards event to destination when sent' do
+  it 'forwards broadcast event to destination when sent' do
     event = Event.new(type: :broadcast, sequence: 1)
+
+    @follower_manager.send_event(event)
+
+    assert_equal [event], @destination.events
+  end
+
+  it 'forwards status update event to destination when sent' do
+    user1 = @user_database.add(1)
+    event = Event.new(type: :update, sequence: 1, from: 1)
 
     @follower_manager.send_event(event)
 
