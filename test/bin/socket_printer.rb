@@ -8,14 +8,7 @@ class LinePrinter
   end
 end
 
-if (ARGV.length != 1)
-  puts "usage #{$0} [listen socket name]"
-  exit
-end
-
-socket_filename = ARGV[0]
-
-server = UNIXServer.new(socket_filename)
+server = TCPServer.new(9998)
 
 socket = server.accept
 destination = LinePrinter.new
