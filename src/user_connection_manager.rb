@@ -1,7 +1,7 @@
 require_relative 'message'
 
 class UserConnectionManager
-  def initialize(socket, connection_limit, user_connection_class, executor = Thread)
+  def initialize(socket, connection_limit, user_connection_class = UserConnection, executor = Thread)
     @socket = socket
     @connection_limit = connection_limit
     @user_connection_class = user_connection_class
