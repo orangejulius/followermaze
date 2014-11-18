@@ -4,7 +4,7 @@ class UserConnection
   end
 
   def get_id
-    @socket.readlines(1).first.to_i
+    @socket.gets.to_i
   end
 
   def send_event(event)
