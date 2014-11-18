@@ -12,7 +12,7 @@ class EventDecoder
     from = decode_user(parts[2])
     to = decode_user(parts[3])
 
-    @destination.send_event(Event.new(sequence: sequence, type: type, from: from, to: to))
+    @destination.send_event(Event.new(sequence: sequence, type: type, from: from, to: to, payload: input))
   end
 
   private

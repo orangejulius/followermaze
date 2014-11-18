@@ -8,11 +8,11 @@ require_relative '../mocks/accumulator'
 describe EventDecoder do
   describe 'parsing broadcast event' do
     def setup
-      input = "123|B"
+      @input = "123|B"
       @destination = EventAccumulator.new
       @decoder = EventDecoder.new(@destination)
 
-      @decoder.send_line(input)
+      @decoder.send_line(@input)
     end
 
     it 'sets sequence number and type' do
@@ -24,6 +24,10 @@ describe EventDecoder do
     it 'leaves to and from nil' do
       assert_nil @destination.events.first.to
       assert_nil @destination.events.first.from
+    end
+
+    it 'sets event payload to raw input string' do
+      assert_equal @input, @destination.events.first.payload
     end
   end
 
