@@ -7,7 +7,7 @@ class UserConnection
     @socket.readlines(1).first.to_i
   end
 
-  def send_payload(string)
-    @socket.write(string)
+  def send_event(event)
+    @socket.write(event.payload)
   end
 end

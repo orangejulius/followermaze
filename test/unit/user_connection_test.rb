@@ -4,14 +4,14 @@ require 'stringio'
 require_relative '../../src/user_connection'
 
 describe UserConnection do
-  it 'writes payload to socket when given payload' do
-    payload = "this would actually be an event"
+  it 'writes payload to socket when given event' do
+    event = Event.new(payload: "test payload")
     socket = StringIO.new
     connection = UserConnection.new(socket)
 
-    connection.send_payload(payload)
+    connection.send_event(event)
 
-    assert_equal payload, socket.string
+    assert_equal "test payload", socket.string
   end
 
   it 'returns id from client (might block) when asked for id' do
