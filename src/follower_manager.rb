@@ -1,14 +1,18 @@
 class FollowerManager
-  def initialize(destination)
+  def initialize(destination, user_database)
     @destination = destination
+    @user_database = user_database
   end
 
   def send_event(event)
+    to = @user_database.get(event.to)
+    from = @user_database.get(event.from)
+
     case event.type
     when :follow
-      event.to.add_follower(event.from)
+      to.add_follower(from)
     when :unfollow
-      event.to.remove_follower(event.from)
+      to.remove_follower(from)
     end
 
     @destination.send_event(event)
