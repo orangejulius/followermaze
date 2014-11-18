@@ -12,7 +12,7 @@ class MessageBuilder
     from = @user_database.get(event.from)
     case event.type
     when :message, :follow
-      unicast(event, to)
+      unicast(event, to.id)
     when :status
       multicast(event, from.followers)
     when :broadcast
@@ -28,6 +28,6 @@ class MessageBuilder
   end
 
   def multicast(event, recipients)
-    recipients.each {|r| unicast(event, r) }
+    recipients.map(&:id).each {|r| unicast(event, r) }
   end
 end

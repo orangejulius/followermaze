@@ -24,6 +24,7 @@ class UserConnectionManager
   end
 
   def send_message(message)
+    return unless @connections[message.recipient]
     @connections[message.recipient].send_event(message.event)
   end
 end
