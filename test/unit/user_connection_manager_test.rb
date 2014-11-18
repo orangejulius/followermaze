@@ -126,4 +126,15 @@ describe UserConnectionManager do
     expected = { 10 => "fake event" }
     assert_equal expected, EventTrackingUserConnection.get_events
   end
+
+  it 'gracefully drops messages for clients without a connection' do
+    fake_socket = FakeSocket.new
+
+    connection_limit = 15
+    manager = UserConnectionManager.new(fake_socket, connection_limit, FakeUserConnection, FakeThread)
+    manager.run
+
+    message = Message.new(event: "fake event", recipient: 30)
+    manager.send_message(message)
+  end
 end
