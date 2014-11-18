@@ -74,4 +74,16 @@ describe EventDecoder do
       assert_equal :message, @destination.events.first.type
     end
   end
+
+  describe 'parsing status update event' do
+    it 'sets type to status' do
+      input = '9|S|80|1'
+      @destination = EventAccumulator.new
+      @decoder = EventDecoder.new(@destination)
+
+      @decoder.send_line(input)
+
+      assert_equal :status, @destination.events.first.type
+    end
+  end
 end
