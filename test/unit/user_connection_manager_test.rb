@@ -35,6 +35,7 @@ class ConnectionCountingFakeSocket < FakeSocket
 end
 
 class SocketCheckingUserConnection < FakeUserConnection
+  # check that a fake socket connection is sent to the object, to ensure UserConnectionManager is instantiating UserConnection correctly
   include Minitest::Assertions
 
   @@creation_count = 0
@@ -50,6 +51,7 @@ class SocketCheckingUserConnection < FakeUserConnection
 end
 
 class EventTrackingUserConnection < FakeUserConnection
+  # keeps track of events sent to any instance of this class to verify that events are sent to the correct connection
   @@next_id = 1
   @@events = {}
 
@@ -72,6 +74,7 @@ class EventTrackingUserConnection < FakeUserConnection
 end
 
 class EventExpectingUserConnection < FakeUserConnection
+  # Keeps track of events sent to object to ensure UserConnectionManager forwards them on correctly
   @@send_event_count = 0
   include Minitest::Assertions
 
