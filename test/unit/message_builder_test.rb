@@ -21,7 +21,7 @@ describe MessageBuilder do
 
     assert_equal 1, @destination.messages.size
     assert_equal event, @destination.messages.first.event
-    assert_equal @user2, @destination.messages.first.recipient
+    assert_equal @user2.id, @destination.messages.first.recipient
   end
 
   it 'creates no messages for an unfollow event' do
@@ -39,7 +39,7 @@ describe MessageBuilder do
 
     assert_equal 1, @destination.messages.size
     assert_equal event, @destination.messages.first.event
-    assert_equal @user2, @destination.messages.first.recipient
+    assert_equal @user2.id, @destination.messages.first.recipient
   end
 
   it 'creates one message addressed to each follower for status updates' do
@@ -52,7 +52,7 @@ describe MessageBuilder do
 
     assert_equal @user1.followers.size, @destination.messages.size
     assert_equal [event, event], @destination.messages.map(&:event)
-    assert_equal @user1.followers, @destination.messages.map(&:recipient)
+    assert_equal @user1.followers.map(&:id), @destination.messages.map(&:recipient)
   end
 
   it 'creates a message for every user from brodcast events' do
