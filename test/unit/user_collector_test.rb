@@ -15,7 +15,7 @@ describe UserCollector do
     end
 
     it 'passes event to destination' do
-      assert_equal [@event], @destination.items
+      assert_equal [@event], @destination.events
     end
 
     it 'adds no users to UserDatabase' do
@@ -39,7 +39,27 @@ describe UserCollector do
     end
 
     it 'passes event to destination' do
-      assert_equal [@event], @destination.items
+      assert_equal [@event], @destination.events
+    end
+  end
+
+  describe 'when passed event with from user' do
+    def setup
+      @database = Minitest::Mock.new
+      @destination = EventAccumulator.new
+      @event = Event.new(type: :follow, from: 1, sequence: 1)
+      @collector = UserCollector.new(@destination, @database)
+
+      @database.expect(:add, nil, [@event.from])
+      @collector.send_event(@event)
+    end
+
+    it 'calls add on user database' do
+      @database.verify
+    end
+
+    it' passes event to destination' do
+      assert_equal [@event], @destination.events
     end
   end
 end

@@ -7,7 +7,9 @@ class UserCollector
   end
 
   def send_event(event)
-    @user_database.add(event.to) unless event.to.nil?
+    @user_database.add(event.to) if event.to
+    @user_database.add(event.from) if event.from
+
     @destination.send_event(event)
   end
 end
