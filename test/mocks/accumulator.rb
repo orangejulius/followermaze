@@ -15,3 +15,8 @@ class EventAccumulator < Accumulator
   alias_method :send_event, :send_item
   alias_method :events, :items
 end
+
+class MessageAccumulator < Accumulator
+  alias_method :send_message, :send_item
+  alias_method :messages, :items
+end
