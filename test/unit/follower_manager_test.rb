@@ -11,7 +11,7 @@ describe FollowerManager do
 
   end
   it 'forwards broadcast event to destination when sent' do
-    event = Event.new(type: :broadcast, sequence: 1)
+    event = Event.new(1, :broadcast)
 
     @follower_manager.send_event(event)
 
@@ -20,7 +20,7 @@ describe FollowerManager do
 
   it 'forwards status update event to destination when sent' do
     user1 = @user_database.add(1)
-    event = Event.new(type: :update, sequence: 1, from: 1)
+    event = Event.new(1, :update, 1)
 
     @follower_manager.send_event(event)
 
@@ -30,7 +30,7 @@ describe FollowerManager do
   it 'adds :from user to :to users followers when sent follow event' do
     user1 = @user_database.add(1)
     user2 = @user_database.add(2)
-    event = Event.new(type: :follow, from: 1, to: 2, sequence: 1)
+    event = Event.new(1, :follow, 1, 2,)
 
     @follower_manager.send_event(event)
 
@@ -41,7 +41,7 @@ describe FollowerManager do
     user1 = @user_database.add(1)
     user2 = @user_database.add(2)
     user2.add_follower user1
-    event = Event.new(type: :unfollow, from: 1, to: 2, sequence: 1)
+    event = Event.new(1, :unfollow, 1, 2)
 
     @follower_manager.send_event(event)
 
@@ -66,7 +66,7 @@ describe FollowerManager do
     destination = FollowerCheckingDestination.new(@user_database)
     user1 = @user_database.add(1)
     user2 = @user_database.add(2)
-    event = Event.new(type: :follow, from: 1, to: 2, sequence: 1)
+    event = Event.new(1, :follow, 1, 2)
     follower_manager = FollowerManager.new(destination, @user_database)
 
     follower_manager.send_event(event)

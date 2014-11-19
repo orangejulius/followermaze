@@ -9,7 +9,7 @@ describe UserCollector do
       @destination = EventAccumulator.new
       @database = Minitest::Mock.new
       @collector = UserCollector.new(@destination, @database)
-      @event = Event.new(type: :broadcast, sequence: 1)
+      @event = Event.new(1, :broadcast)
 
       @collector.send_event(@event)
     end
@@ -27,7 +27,7 @@ describe UserCollector do
     def setup
       @database = Minitest::Mock.new
       @destination = EventAccumulator.new
-      @event = Event.new(type: :follow, to: 1, sequence: 1)
+      @event = Event.new(1, :follow, nil, 1)
       @collector = UserCollector.new(@destination, @database)
 
       @database.expect(:add, nil, [@event.to])
@@ -47,7 +47,7 @@ describe UserCollector do
     def setup
       @database = Minitest::Mock.new
       @destination = EventAccumulator.new
-      @event = Event.new(type: :follow, from: 1, sequence: 1)
+      @event = Event.new(1, :follow, 1)
       @collector = UserCollector.new(@destination, @database)
 
       @database.expect(:add, nil, [@event.from])

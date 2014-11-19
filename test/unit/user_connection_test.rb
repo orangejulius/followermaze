@@ -5,7 +5,7 @@ require_relative '../../src/user_connection'
 
 describe UserConnection do
   it 'writes payload to socket when given event' do
-    event = Event.new(payload: "test payload")
+    event = Event.new(nil, nil, nil, nil, "test payload")
     socket = StringIO.new
     connection = UserConnection.new(socket)
 
