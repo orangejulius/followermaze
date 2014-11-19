@@ -23,7 +23,7 @@ class MessageBuilder
   private
 
   def unicast(event, recipient)
-    message = Message.new(event: event, recipient: recipient)
+    message = Message.new(event, recipient)
     @destination.send_message message
   end
 

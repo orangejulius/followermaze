@@ -120,7 +120,7 @@ describe UserConnectionManager do
     manager = UserConnectionManager.new(fake_socket, connection_limit, EventTrackingUserConnection, FakeThread)
     manager.run
 
-    message = Message.new(event: "fake event", recipient: 10)
+    message = Message.new("fake event", 10)
     manager.send_message(message)
 
     expected = { 10 => "fake event" }
@@ -134,7 +134,7 @@ describe UserConnectionManager do
     manager = UserConnectionManager.new(fake_socket, connection_limit, FakeUserConnection, FakeThread)
     manager.run
 
-    message = Message.new(event: "fake event", recipient: 30)
+    message = Message.new("fake event", 30)
     manager.send_message(message)
   end
 end
