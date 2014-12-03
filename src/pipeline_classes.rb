@@ -10,8 +10,7 @@ class FirstStep
   end
 
   def send_event(event)
-    # do nothing, just forward it on
-    @destination.send_event(event)
+    @destination.send_event(event.strip)
   end
 end
 
@@ -30,7 +29,7 @@ class SecondStep
     @executor.new do
       while true do
         begin
-          @destination.send_event @queue.pop
+          @destination.send_event @queue.pop.upcase
         rescue Exception
           break
         end

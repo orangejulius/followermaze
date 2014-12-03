@@ -19,9 +19,9 @@ describe "pipeline" do
     step2 = SecondStep.new(accumulator, FakeThread)
     step1 = FirstStep.new(step2)
 
-    step1.send_event "fake event"
+    step1.send_event "fake event  "
     step2.run
 
-    assert_equal ["fake event"], accumulator.events
+    assert_equal ["FAKE EVENT"], accumulator.events
   end
 end
