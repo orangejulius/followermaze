@@ -4,22 +4,8 @@ class FakeThread
   end
 end
 
-class FirstStep
-  def initialize(destination)
-    @destination = destination
-  end
-
-  def process(event)
-    event.strip
-  end
-
-  def send_event(event)
-    @destination.send_event(process(event))
-  end
-end
-
-class SecondStep
-  def initialize(destination, executor = Thread)
+class PipelineStep
+  def initialize(destination, executor)
     @destination = destination
     @executor = executor
     @queue = Queue.new
@@ -29,20 +15,40 @@ class SecondStep
     @queue.push(event)
   end
 
-  def process(event)
-    event.upcase
-  end
-
   def run
     @executor.new do
-      while true do
-        begin
-          @destination.send_event(process(@queue.pop))
-        rescue Exception
-          break
+      begin
+        while true do
+          event = @queue.pop
+          @destination.send_event(process(event))
+          if event.downcase == "stop"
+            return
+          end
         end
+      rescue Exception => e
+        break
       end
     end
+  end
+end
+
+class FirstStep < PipelineStep
+  def initialize(destination, executor)
+    super(destination, executor)
+  end
+
+  def process(event)
+    event.strip
+  end
+end
+
+class SecondStep < PipelineStep
+  def initialize(destination, executor)
+    super(destination, executor)
+  end
+
+  def process(event)
+    event.upcase
   end
 end
 
