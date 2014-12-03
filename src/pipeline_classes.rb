@@ -1,3 +1,9 @@
+class FakeThread
+  def self.new
+    yield
+  end
+end
+
 class FirstStep
   def initialize(destination)
     @destination = destination
@@ -10,8 +16,9 @@ class FirstStep
 end
 
 class SecondStep
-  def initialize(destination)
+  def initialize(destination, executor = Thread)
     @destination = destination
+    @executor = executor
     @queue = Queue.new
   end
 
@@ -20,9 +27,13 @@ class SecondStep
   end
 
   def run
-    Thread.new do
+    @executor.new do
       while true do
-        @destination.send_event @queue.pop
+        begin
+          @destination.send_event @queue.pop
+        rescue Exception
+          break
+        end
       end
     end
   end

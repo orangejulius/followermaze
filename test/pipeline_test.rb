@@ -16,12 +16,11 @@ describe "pipeline" do
 
   it "allows two step pipeline to work" do
     accumulator = EventAccumulator.new
-    step2 = SecondStep.new(accumulator)
+    step2 = SecondStep.new(accumulator, FakeThread)
     step1 = FirstStep.new(step2)
 
     step1.send_event "fake event"
     step2.run
-    sleep 0.1
 
     assert_equal ["fake event"], accumulator.events
   end
