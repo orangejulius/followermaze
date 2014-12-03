@@ -9,8 +9,12 @@ class FirstStep
     @destination = destination
   end
 
+  def process(event)
+    event.strip
+  end
+
   def send_event(event)
-    @destination.send_event(event.strip)
+    @destination.send_event(process(event))
   end
 end
 
@@ -25,11 +29,15 @@ class SecondStep
     @queue.push(event)
   end
 
+  def process(event)
+    event.upcase
+  end
+
   def run
     @executor.new do
       while true do
         begin
-          @destination.send_event @queue.pop.upcase
+          @destination.send_event(process(@queue.pop))
         rescue Exception
           break
         end
