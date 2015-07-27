@@ -1,0 +1,13 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ruby-prof (0.15.2)
+    ruby-prof-flamegraph (0.3.0)
+      ruby-prof (~> 0.13)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ruby-prof
+  ruby-prof-flamegraph
